@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clue Scroll guide</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Clue Scroll guide</h1>
+        </header>
+        
+        <div class="search-container">
+            <input type="text" id="search-bar" placeholder="Search clues...">
+        </div>
+        
+        <div class="content">
+            <div id="sidebar">
+                <button data-section="speakTo" class="active">Speak to...</button>
+                <button data-section="anagrams">Anagrams</button>
+                <button data-section="challenges">Challenges</button>
+                <button data-section="slidingPuzzles">Sliding Puzzles</button>
+                <button data-section="maps">Maps</button>
+                <button data-section="riddles">Riddles</button>
+                <button data-section="emoteOutfit">Emote & Outfit</button>
+            </div>
+            
+            <div class="main-content">
+                <section id="speakTo" class="section active">
+                    <h2>Speak to...</h2>
+                    <div class="content-container" id="speakToList"></div>
+                </section>
+                
+                <section id="anagrams" class="section">
+                    <h2>Anagrams</h2>
+                    <div class="content-container" id="anagramsList"></div>
+                </section>
+                
+                <section id="challenges" class="section">
+                    <h2>Challenges</h2>
+                    <div class="content-container" id="challengesList"></div>
+                </section>
+                
+                <section id="slidingPuzzles" class="section">
+                    <h2>Sliding Puzzles</h2>
+                    <div class="puzzle-container">
+                        <div class="puzzle-instructions">
+                            <p>Images of the completed sliding puzzles:</p>
+                            <p>Puzzle solver tool (Java) by Akg: <a href="https://github.com/Razgals/PuzzleSolver" target="_blank">https://github.com/Razgals/PuzzleSolver</a></p>
+                        </div>
+                        <div class="puzzles-grid">
+                            <div class="puzzle-item">
+                                <img src="assets/Sliding Puzzles/puzzle1.png" alt="Sliding Puzzle 1">
+                                <p>Puzzle 1</p>
+                            </div>
+                            <div class="puzzle-item">
+                                <img src="assets/Sliding Puzzles/puzzle2.png" alt="Sliding Puzzle 2">
+                                <p>Puzzle 2</p>
+                            </div>
+                            <div class="puzzle-item">
+                                <img src="assets/Sliding Puzzles/puzzle3.png" alt="Sliding Puzzle 3">
+                                <p>Puzzle 3</p>
+                            </div>
+                            <div class="puzzle-item">
+                                <img src="assets/Sliding Puzzles/puzzle4.jpeg" alt="Sliding Puzzle 4">
+                                <p>Puzzle solving strategy</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                
+                <section id="maps" class="section">
+                    <h2>Maps</h2>
+                    <div class="content-container">
+                        <img src="assets/Maps/maps.jpg" alt="Treasure Trail Maps Collection" class="maps-image">
+                    </div>
+                </section>
+                
+                <section id="riddles" class="section">
+                    <h2>Riddles</h2>
+                    <div class="content-container" id="riddlesList"></div>
+                </section>
+                
+                <section id="emoteOutfit" class="section">
+                    <h2>Emote and Outfit</h2>
+                    <div class="content-container" id="emoteOutfitList"></div>
+                </section>
+                
+                <section id="searchResults" class="section">
+                    <h2>Search Results</h2>
+                    <div class="content-container" id="searchResultsList"></div>
+                </section>
+            </div>
+        </div>
+        
+        <div class="creator">
+            <p>Made by Akg</p>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
