@@ -1,104 +1,760 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Clue Scroll guide</title>
-    <link rel="stylesheet" href="style.css">
+  <title>Clue Scroll Helper</title>
+  <style>
+    @font-face {
+      font-family: 'RS-Quill';
+      src: url('../src/assets/fonts/RuneScape-Quill-8.otf') format('opentype'),
+           url('RuneScape-Quill-8.otf') format('opentype');
+      font-weight: normal;
+      font-style: normal;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      font-size: 135%;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      font-family: 'RS-Quill', 'Segoe UI', sans-serif;
+      background: #1a1a1a;
+      color: #f0e68c;
+      overflow: auto;
+    }
+
+    body {
+      display: flex;
+      flex-direction: column;
+      min-width: 300px;
+      min-height: 100vh;
+    }
+
+    /* Scrollbar styling */
+    ::-webkit-scrollbar {
+      width: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #1a1a1a;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #8b6914;
+      border-radius: 3px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #a88020;
+    }
+
+    #header {
+      text-align: left;
+      padding: 0.5rem 1rem;
+      background: linear-gradient(to bottom, #2a2a2a, #1a1a1a);
+      border-bottom: 2px solid #8b6914;
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: #ffffff;
+      text-shadow: -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000, 2px 2px 0 #000;
+    }
+
+    #main-content {
+      display: flex;
+      flex-direction: row;
+      flex-grow: 1;
+      overflow: hidden;
+    }
+
+    #sidebar {
+      width: 9rem;
+      min-width: 9rem;
+      display: flex;
+      flex-direction: column;
+      background: #222222;
+      padding: 0.5rem;
+      border-right: 2px solid #8b6914;
+      overflow-y: auto;
+    }
+
+    #sidebar button, 
+    #sidebar .search-section {
+      margin-bottom: 0.25rem;
+      padding: 0.5rem 0.6rem;
+      width: 100%;
+      background: url('button.jpg') repeat, url('../src/assets/button.jpg') repeat;
+      background-size: cover;
+      color: #f0e68c;
+      border: 2px outset #8b6914;
+      border-radius: 4px;
+      cursor: pointer;
+      font-family: 'RS-Quill', 'Segoe UI', sans-serif;
+      font-size: 0.75rem;
+      font-weight: bold;
+      text-align: left;
+      text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+      transition: all 0.1s ease;
+    }
+
+    #sidebar button:hover {
+      border: 2px inset #8b6914;
+      transform: translateY(1px);
+    }
+
+    #sidebar button:active,
+    #sidebar button.active {
+      border: 2px inset #8b6914;
+      background-color: rgba(139, 105, 20, 0.3);
+    }
+
+    #sidebar .search-section {
+      cursor: default;
+      padding: 0;
+      margin-bottom: 0.5rem;
+    }
+
+    #search-bar {
+      width: 100%;
+      padding: 0.5rem 0.6rem;
+      font-family: 'RS-Quill', 'Segoe UI', sans-serif;
+      font-size: 0.75rem;
+      background: rgba(0, 0, 0, 0.3);
+      border: none;
+      border-radius: 2px;
+      color: #f0e68c;
+    }
+
+    #search-bar::placeholder {
+      color: rgba(240, 230, 140, 0.6);
+    }
+
+    #search-bar:focus {
+      outline: none;
+      background: rgba(0, 0, 0, 0.5);
+    }
+
+    #content {
+      flex-grow: 1;
+      overflow-y: auto;
+      padding: 0.75rem;
+      background: #1a1a1a;
+    }
+
+    .section {
+      display: none;
+      width: 100%;
+    }
+
+    .section.active {
+      display: block;
+    }
+
+    /* Data tables and items */
+    .data-table {
+      width: 100%;
+    }
+
+    .data-table > div,
+    .data-item {
+      background: linear-gradient(135deg, #2a2a2a 0%, #1f1f1f 100%);
+      border: 1px solid #8b6914;
+      border-radius: 4px;
+      padding: 0.6rem 0.75rem;
+      margin-bottom: 0.4rem;
+      font-size: 0.85rem;
+      line-height: 1.4;
+      color: #e0d0a0;
+    }
+
+    .data-table > div:hover,
+    .data-item:hover {
+      background: linear-gradient(135deg, #353535 0%, #252525 100%);
+      border-color: #a88020;
+    }
+
+    /* Riddles - collapsible */
+    .riddle-box {
+      margin-bottom: 0.4rem;
+    }
+
+    .riddle-item {
+      background: linear-gradient(135deg, #2a2a2a 0%, #1f1f1f 100%);
+      border: 1px solid #8b6914;
+      border-radius: 4px;
+      padding: 0.6rem 0.75rem;
+      cursor: pointer;
+      font-size: 0.85rem;
+      color: #e0d0a0;
+      transition: all 0.15s ease;
+    }
+
+    .riddle-item:hover {
+      background: linear-gradient(135deg, #353535 0%, #252525 100%);
+      border-color: #a88020;
+    }
+
+    .riddle-item::before {
+      content: "> ";
+      color: #8b6914;
+      font-size: 0.65rem;
+    }
+
+    .riddle-box.open .riddle-item::before {
+      content: "v ";
+    }
+
+    .answer-item {
+      display: none;
+      background: linear-gradient(135deg, #1f2f1f 0%, #152015 100%);
+      border: 1px solid #4a7a4a;
+      border-top: none;
+      border-radius: 0 0 4px 4px;
+      padding: 0.6rem 0.75rem;
+      margin-top: -1px;
+      font-size: 0.85rem;
+      color: #90ee90;
+    }
+
+    .riddle-box.open .answer-item {
+      display: block;
+    }
+
+    /* Text styling */
+    .npc-name,
+    .anagram-text {
+      color: #ffcc00;
+      font-weight: bold;
+    }
+
+    .challenge-answer {
+      color: #90ee90;
+      font-weight: bold;
+    }
+
+    .answer-label {
+      color: #8b6914;
+      font-weight: bold;
+    }
+
+    .answer-text {
+      color: #90ee90;
+    }
+
+    .emote-label,
+    .location-label,
+    .acquire-label {
+      color: #ffcc00;
+      font-weight: bold;
+    }
+
+    /* Search results */
+    .search-result {
+      display: none;
+      background: linear-gradient(135deg, #2a2a2a 0%, #1f1f1f 100%);
+      border: 1px solid #8b6914;
+      border-radius: 4px;
+      padding: 0.6rem 0.75rem;
+      margin-bottom: 0.4rem;
+      font-size: 0.85rem;
+      color: #e0d0a0;
+    }
+
+    .search-result.active {
+      display: block;
+    }
+
+    /* Sliding puzzles */
+    #slidingPuzzles {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+      padding: 0.6rem;
+    }
+
+    #slidingPuzzles.active {
+      display: flex;
+    }
+
+    .puzzle-selector {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .puzzle-selector button {
+      padding: 0.4rem 0.8rem;
+      background: url('button.jpg') repeat, url('../src/assets/button.jpg') repeat;
+      background-size: cover;
+      color: #f0e68c;
+      border: 2px outset #8b6914;
+      border-radius: 4px;
+      cursor: pointer;
+      font-family: 'RS-Quill', 'Segoe UI', sans-serif;
+      font-size: 0.7rem;
+      font-weight: bold;
+      text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+    }
+
+    .puzzle-selector button:hover,
+    .puzzle-selector button.active {
+      border: 2px inset #8b6914;
+    }
+
+    .puzzle-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .puzzle-canvas {
+      border: 2px solid #8b6914;
+      border-radius: 4px;
+      background: #2a2a2a;
+    }
+
+    .puzzle-controls {
+      display: flex;
+      gap: 0.4rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .puzzle-controls button {
+      padding: 0.3rem 0.6rem;
+      background: url('button.jpg') repeat, url('../src/assets/button.jpg') repeat;
+      background-size: cover;
+      color: #f0e68c;
+      border: 2px outset #8b6914;
+      border-radius: 4px;
+      cursor: pointer;
+      font-family: 'RS-Quill', 'Segoe UI', sans-serif;
+      font-size: 0.65rem;
+      font-weight: bold;
+      text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+    }
+
+    .puzzle-controls button:hover {
+      border: 2px inset #8b6914;
+    }
+
+    #movesCounter {
+      color: #90ee90;
+      font-size: 0.8rem;
+      margin-top: 0.3rem;
+    }
+
+    /* Maps */
+    #maps {
+      padding: 0.6rem;
+    }
+
+    #maps.active {
+      display: block;
+    }
+
+    .maps-tier {
+      margin-bottom: 0.5rem;
+      border: 1px solid #8b6914;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .maps-tier-title {
+      font-size: 0.9rem;
+      font-weight: bold;
+      color: #ffcc00;
+      padding: 0.5rem 0.75rem;
+      background: linear-gradient(135deg, #2a2a2a 0%, #1f1f1f 100%);
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+    }
+
+    .maps-tier-title:hover {
+      background: linear-gradient(135deg, #353535 0%, #252525 100%);
+    }
+
+    .maps-tier-title::after {
+      content: '\25BC';
+      font-size: 0.7rem;
+      transition: transform 0.2s ease;
+    }
+
+    .maps-tier.collapsed .maps-tier-title::after {
+      transform: rotate(-90deg);
+    }
+
+    .maps-tier-title.easy { color: #90ee90; }
+    .maps-tier-title.medium { color: #4fc3f7; }
+    .maps-tier-title.hard { color: #ff6b6b; }
+
+    .maps-tier-content {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: 0.5rem;
+      padding: 0.5rem;
+      background: #1a1a1a;
+    }
+
+    .maps-tier.collapsed .maps-tier-content {
+      display: none;
+    }
+
+    .map-item {
+      background: linear-gradient(135deg, #2a2a2a 0%, #1f1f1f 100%);
+      border: 1px solid #8b6914;
+      border-radius: 4px;
+      padding: 0.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+      cursor: pointer;
+      transition: transform 0.1s ease;
+    }
+
+    .map-item:hover {
+      background: linear-gradient(135deg, #353535 0%, #252525 100%);
+      border-color: #a88020;
+      transform: scale(1.02);
+    }
+
+    .map-name {
+      color: #ffcc00;
+      font-weight: bold;
+      font-size: 0.7rem;
+      text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+    }
+
+    .map-description {
+      color: #e0d0a0;
+      font-size: 0.6rem;
+      line-height: 1.3;
+    }
+
+    .map-item img {
+      width: 100%;
+      max-width: 150px;
+      height: auto;
+      border: 1px solid #8b6914;
+      border-radius: 4px;
+      margin-top: 0.2rem;
+    }
+
+    /* Map modal for enlarged view */
+    .map-modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.9);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .map-modal.active {
+      display: flex;
+    }
+
+    .map-modal img {
+      max-width: 90%;
+      max-height: 70%;
+      border: 3px solid #8b6914;
+      border-radius: 8px;
+    }
+
+    .map-modal-title {
+      color: #ffcc00;
+      font-size: 1.2rem;
+      font-weight: bold;
+      text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+    }
+
+    .map-modal-desc {
+      color: #e0d0a0;
+      font-size: 0.9rem;
+    }
+
+    .map-modal-close {
+      color: #f0e68c;
+      font-size: 0.8rem;
+      margin-top: 0.5rem;
+      opacity: 0.7;
+    }
+
+    /* Emote outfit items */
+    .emote-outfit-item {
+      background: linear-gradient(135deg, #2a2a2a 0%, #1f1f1f 100%);
+      border: 1px solid #8b6914;
+      border-radius: 4px;
+      padding: 0.75rem;
+      margin-bottom: 0.5rem;
+      font-size: 0.85rem;
+      line-height: 1.5;
+    }
+
+    .emote-outfit-item:hover {
+      background: linear-gradient(135deg, #353535 0%, #252525 100%);
+      border-color: #a88020;
+    }
+
+    /* Not released notice */
+    .not-released-notice {
+      background: linear-gradient(135deg, #3a2a1a 0%, #2a1a0a 100%);
+      border: 1px solid #8b6914;
+      border-radius: 4px;
+      padding: 0.75rem;
+      margin-bottom: 0.75rem;
+      color: #ffcc00;
+      font-size: 0.85rem;
+      text-align: center;
+      font-style: italic;
+    }
+
+    /* Puzzle hint text */
+    .puzzle-hint {
+      color: #aaa;
+      font-size: 0.7rem;
+      text-align: center;
+      margin-top: 0.5rem;
+      line-height: 1.4;
+    }
+
+    .puzzle-warning {
+      color: #ff6b6b;
+      font-weight: bold;
+      display: block;
+      margin-top: 0.3rem;
+    }
+
+    /* Section titles */
+    .section-title {
+      color: #ffcc00;
+      font-size: 1rem;
+      font-weight: bold;
+      margin-bottom: 0.75rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid #8b6914;
+      text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000, 2px 2px 3px rgba(0,0,0,0.8);
+    }
+
+    /* No results */
+    .no-results {
+      text-align: center;
+      color: #888;
+      padding: 1.25rem;
+      font-style: italic;
+    }
+
+    /* Long text adjustment */
+    .long-text {
+      font-size: 0.75rem;
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>Clue Scroll guide</h1>
-        </header>
-        
-        <div class="search-container">
-            <input type="text" id="search-bar" placeholder="Search clues...">
-        </div>
-        
-        <div class="content">
-            <div id="sidebar">
-                <button data-section="speakTo" class="active">Speak to...</button>
-                <button data-section="anagrams">Anagrams</button>
-                <button data-section="challenges">Challenges</button>
-                <button data-section="slidingPuzzles">Sliding Puzzles</button>
-                <button data-section="maps">Maps</button>
-                <button data-section="riddles">Riddles</button>
-                <button data-section="emoteOutfit">Emote & Outfit</button>
-            </div>
-            
-            <div class="main-content">
-                <section id="speakTo" class="section active">
-                    <h2>Speak to...</h2>
-                    <div class="content-container" id="speakToList"></div>
-                </section>
-                
-                <section id="anagrams" class="section">
-                    <h2>Anagrams</h2>
-                    <div class="content-container" id="anagramsList"></div>
-                </section>
-                
-                <section id="challenges" class="section">
-                    <h2>Challenges</h2>
-                    <div class="content-container" id="challengesList"></div>
-                </section>
-                
-                <section id="slidingPuzzles" class="section">
-                    <h2>Sliding Puzzles</h2>
-                    <div class="puzzle-container">
-                        <div class="puzzle-instructions">
-                            <p>Images of the completed sliding puzzles:</p>
-                            <p>Puzzle solver tool (Java) by Akg: <a href="https://github.com/Razgals/PuzzleSolver" target="_blank">https://github.com/Razgals/PuzzleSolver</a></p>
-                        </div>
-                        <div class="puzzles-grid">
-                            <div class="puzzle-item">
-                                <img src="assets/Sliding Puzzles/puzzle1.png" alt="Sliding Puzzle 1">
-                                <p>Puzzle 1</p>
-                            </div>
-                            <div class="puzzle-item">
-                                <img src="assets/Sliding Puzzles/puzzle2.png" alt="Sliding Puzzle 2">
-                                <p>Puzzle 2</p>
-                            </div>
-                            <div class="puzzle-item">
-                                <img src="assets/Sliding Puzzles/puzzle3.png" alt="Sliding Puzzle 3">
-                                <p>Puzzle 3</p>
-                            </div>
-                            <div class="puzzle-item">
-                                <img src="assets/Sliding Puzzles/puzzle4.jpeg" alt="Sliding Puzzle 4">
-                                <p>Puzzle solving strategy</p>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-                
-                <section id="maps" class="section">
-                    <h2>Maps</h2>
-                    <div class="content-container">
-                        <img src="assets/Maps/maps.jpg" alt="Treasure Trail Maps Collection" class="maps-image">
-                    </div>
-                </section>
-                
-                <section id="riddles" class="section">
-                    <h2>Riddles</h2>
-                    <div class="content-container" id="riddlesList"></div>
-                </section>
-                
-                <section id="emoteOutfit" class="section">
-                    <h2>Emote and Outfit</h2>
-                    <div class="content-container" id="emoteOutfitList"></div>
-                </section>
-                
-                <section id="searchResults" class="section">
-                    <h2>Search Results</h2>
-                    <div class="content-container" id="searchResultsList"></div>
-                </section>
-            </div>
-        </div>
-        
-        <div class="creator">
-            <p>Made by Akg</p>
-        </div>
+  <div id="header">Clue Scroll Helper</div>
+  <div id="main-content">
+    <div id="sidebar">
+      <div class="search-section">
+        <input type="text" id="search-bar" placeholder="Search...">
+      </div>
+      <button data-section="speakTo">Speak to...</button>
+      <button data-section="anagrams">Anagrams</button>
+      <button data-section="challenges">Challenges</button>
+      <button data-section="riddles">Riddles</button>
+      <button data-section="slidingPuzzles">Puzzles</button>
+      <button data-section="maps">Maps</button>
+      <button data-section="emoteOutfit">Emote/Outfit</button>
     </div>
-    <script src="script.js"></script>
+    <div id="content">
+      <div id="searchResults" class="section">
+        <div class="section-title">Search Results</div>
+        <div id="searchResultsList" class="data-table"></div>
+      </div>
+      <div id="speakTo" class="section">
+        <div class="section-title">Speak to NPCs</div>
+        <div id="speakToList" class="data-table"></div>
+      </div>
+      <div id="anagrams" class="section">
+        <div class="section-title">Anagram Solutions</div>
+        <div id="anagramsList" class="data-table"></div>
+      </div>
+      <div id="challenges" class="section">
+        <div class="section-title">Challenge Answers</div>
+        <div id="challengesList" class="data-table"></div>
+      </div>
+      <div id="slidingPuzzles" class="section">
+        <div class="section-title">Puzzle Solver</div>
+        <div class="puzzle-selector">
+          <button id="puzzleCastle" class="active">Castle</button>
+          <button id="puzzleTree">Tree</button>
+          <button id="puzzleTroll">Troll</button>
+        </div>
+        <div class="puzzle-container">
+          <canvas id="puzzleCanvas" class="puzzle-canvas" width="250" height="250"></canvas>
+          <div id="movesCounter"></div>
+          <div class="puzzle-controls">
+            <button id="solveBtn">Solve</button>
+            <button id="resetBtn">Reset</button>
+          </div>
+          <div class="puzzle-hint">
+            <strong>How to use:</strong><br>
+            1. Arrange tiles to match your in-game puzzle<br>
+            2. Click "Solve" to calculate solution<br>
+            3. Click the highlighted tile to move it<br>
+            4. Repeat step 3 in-game until solved<br>
+            <span class="puzzle-warning">Warning: Double-check your arrangement! An incorrectly placed tile will make the puzzle unsolvable.</span>
+          </div>
+        </div>
+      </div>
+      <div id="maps" class="section">
+        <div class="section-title">Treasure Trail Maps</div>
+        
+        <div class="maps-tier">
+          <div class="maps-tier-title easy">Easy Clues</div>
+          <div class="maps-tier-content">
+            <div class="map-item" data-name="Champions Guild Map" data-desc="West of Champions Guild" data-img="maps/champ_guild.png">
+              <div class="map-name">Champions Guild</div>
+              <div class="map-description">West of Champions Guild</div>
+              <img src="maps/champ_guild.png" alt="Champions Guild Map">
+            </div>
+            <div class="map-item" data-name="Varrock Mine Map" data-desc="Dig at the fence at the south-east Varrock mine" data-img="maps/varrock_mine.png">
+              <div class="map-name">Varrock Mine</div>
+              <div class="map-description">SE Varrock mine fence</div>
+              <img src="maps/varrock_mine.png" alt="Varrock Mine Map">
+            </div>
+            <div class="map-item" data-name="Falador Rocks Map" data-desc="Fenced area north-east of Falador, south-west of Barbarian Village" data-img="maps/falador_mine.png">
+              <div class="map-name">Falador Rocks</div>
+              <div class="map-description">NE Falador fenced area</div>
+              <img src="maps/falador_mine.png" alt="Falador Rocks Map">
+            </div>
+          </div>
+        </div>
+
+        <div class="maps-tier">
+          <div class="maps-tier-title medium">Medium Clues</div>
+          <div class="maps-tier-content">
+            <div class="map-item" data-name="Draynor Fish Spot Map" data-desc="South of Draynor Village's bank" data-img="maps/draynor_fishing.png">
+              <div class="map-name">Draynor Fishing</div>
+              <div class="map-description">South of Draynor bank</div>
+              <img src="maps/draynor_fishing.png" alt="Draynor Fish Spot Map">
+            </div>
+            <div class="map-item" data-name="Observatory Map" data-desc="West of Tree Gnome Village" data-img="maps/observatory.png">
+              <div class="map-name">Observatory</div>
+              <div class="map-description">West of Tree Gnome Village</div>
+              <img src="maps/observatory.png" alt="Observatory Map">
+            </div>
+          </div>
+        </div>
+
+        <div class="maps-tier">
+          <div class="maps-tier-title hard">Hard Clues</div>
+          <div class="maps-tier-content">
+            <div class="map-item" data-name="Varrock Lumberyard Map" data-desc="Lumberyard, north-east of Varrock" data-img="maps/varrock_lumber.png">
+              <div class="map-name">Varrock Lumber</div>
+              <div class="map-description">NE Varrock lumberyard</div>
+              <img src="maps/varrock_lumber.png" alt="Varrock Lumberyard Map">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Map Modal -->
+      <div class="map-modal" id="mapModal">
+        <div class="map-modal-title" id="mapModalTitle"></div>
+        <img id="mapModalImg" src="" alt="Map">
+        <div class="map-modal-desc" id="mapModalDesc"></div>
+        <div class="map-modal-close">Click anywhere to close</div>
+      </div>
+      <div id="riddles" class="section">
+        <div class="section-title">Riddle Solutions (click to reveal)</div>
+        <div id="riddlesList" class="data-table"></div>
+      </div>
+      <div id="emoteOutfit" class="section">
+        <div class="section-title">Emote & Outfit Clues</div>
+        <div class="not-released-notice">These clue steps have not been released yet.</div>
+        <div id="emoteOutfitList" class="data-table"></div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- DATA FILE - Edit this file to add/update clue data! -->
+  <script src="clue_data.js"></script>
+  
+  <!-- Application Logic - Don't edit unless you know what you're doing -->
+  <script src="popup.js"></script>
+  <script src="puzzle_solver.js"></script>
+  <script>
+    // Initialize puzzle solver when puzzles section loads
+    let currentPuzzle = null;
+    
+    function initPuzzle(puzzleSet) {
+      if (typeof PuzzleBox !== 'undefined') {
+        currentPuzzle = new PuzzleBox('puzzleCanvas', 'solveBtn', puzzleSet, 'movesCounter', 'resetBtn');
+      }
+    }
+    
+    document.getElementById('puzzleCastle').addEventListener('click', function() {
+      document.querySelectorAll('.puzzle-selector button').forEach(b => b.classList.remove('active'));
+      this.classList.add('active');
+      initPuzzle(puzzleSetCastle);
+    });
+    
+    document.getElementById('puzzleTree').addEventListener('click', function() {
+      document.querySelectorAll('.puzzle-selector button').forEach(b => b.classList.remove('active'));
+      this.classList.add('active');
+      initPuzzle(puzzleSetTree);
+    });
+    
+    document.getElementById('puzzleTroll').addEventListener('click', function() {
+      document.querySelectorAll('.puzzle-selector button').forEach(b => b.classList.remove('active'));
+      this.classList.add('active');
+      initPuzzle(puzzleSetTroll);
+    });
+    
+    // Initialize castle puzzle by default after page loads
+    window.addEventListener('load', function() {
+      setTimeout(() => initPuzzle(puzzleSetCastle), 100);
+    });
+
+    // Map tier collapsible functionality
+    document.querySelectorAll('.maps-tier-title').forEach(title => {
+      title.addEventListener('click', function() {
+        this.parentElement.classList.toggle('collapsed');
+      });
+    });
+
+    // Map modal functionality
+    const mapModal = document.getElementById('mapModal');
+    const mapModalImg = document.getElementById('mapModalImg');
+    const mapModalTitle = document.getElementById('mapModalTitle');
+    const mapModalDesc = document.getElementById('mapModalDesc');
+
+    document.querySelectorAll('.map-item').forEach(item => {
+      item.addEventListener('click', function() {
+        mapModalTitle.textContent = this.dataset.name;
+        mapModalDesc.textContent = this.dataset.desc;
+        mapModalImg.src = this.dataset.img;
+        mapModal.classList.add('active');
+      });
+    });
+
+    mapModal.addEventListener('click', function() {
+      this.classList.remove('active');
+    });
+  </script>
 </body>
 </html>

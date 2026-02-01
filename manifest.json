@@ -1,38 +1,35 @@
 {
-    "manifest_version": 3,
-    "name": "Ye Olde Guide to Buried Riches",
-    "version": "1.0",
-    "description": "Ye Olde Guide to Buried Riches...",
-    "action": {
-        "default_popup": "index.html"
-    },
-    "side_panel": {
-        "default_path": "index.html"
-    },
-    "permissions": [
-        "sidePanel"
-    ],
-    "icons": {
-        "16": "assets/icon16.png",
-        "48": "assets/icon48.png",
-        "128": "assets/icon128.png"
-    },
-    "web_accessible_resources": [
-        {
-            "resources": [
-                "assets/Sliding Puzzles/puzzle1.png",
-                "assets/Sliding Puzzles/puzzle2.png",
-                "assets/Sliding Puzzles/puzzle3.png",
-                "assets/Sliding Puzzles/puzzle4.jpeg",
-                "assets/Maps/maps.jpg",
-                "assets/parchment.png",
-                "assets/RuneScape-Bold-12.otf",
-                "assets/button.png",
-                "assets/icon16.png",
-                "assets/icon48.png",
-                "assets/icon128.png"
-            ],
-            "matches": ["<all_urls>"]
-        }
-    ]
+  "manifest_version": 3,
+  "name": "LostKit Clue Scroll Helper",
+  "version": "2.0",
+  "description": "Clue Scroll Helper for Lost City - Part of LostKit",
+  "action": {
+    "default_popup": "index.html"
+  },
+  "side_panel": {
+    "default_path": "index.html"
+  },
+  "permissions": [
+    "sidePanel"
+  ],
+  "icons": {
+    "16": "icon16.png",
+    "48": "icon48.png",
+    "128": "icon128.png"
+  },
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "maps/*",
+        "puzzle_solver/**/*",
+        "button.jpg",
+        "RuneScape-Quill-8.otf",
+        "puzzle_solver.js",
+        "icon16.png",
+        "icon48.png",
+        "icon128.png"
+      ],
+      "matches": ["<all_urls>"]
+    }
+  ]
 }
