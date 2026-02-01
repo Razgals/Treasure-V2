@@ -95,22 +95,12 @@ const anagramsData = [
 //  Format: { problem: "The question asked", answer: "The answer" }
 //
 const challengesData = [
-  { problem: "19 to the power of 3", answer: "6859" },
-  { problem: "How many animals in the Ardougne Zoo?", answer: "32" },
-  { problem: "How many bookcases are in the palace library?", answer: "18" },
-  { problem: "How many banana trees are there in the plantation?", answer: "33" },
-  { problem: "How many buildings in the village?", answer: "11" },
-  { problem: "How many cages are behind Jerico's house?", answer: "3" },
-  { problem: "How many doors have X's on the fishing platform?", answer: "20" },
-  { problem: "How many fisherman are on the fishing platform?", answer: "23" },
-  { problem: "How many flowers are there in the clearing below this platform?", answer: "13" },
-  { problem: "How many gnomes on the Gnome ball field have red patches on their uniforms?", answer: "6" },
-  { problem: "How many houses have crosses on them?", answer: "20" },
-  { problem: "If X is 15 and Y is 3, what is 3X + Y?", answer: "48" },
-  { problem: "I have 16 kebabs, I eat one myself and share the rest equally between 3 friends how many do they have each?", answer: "5" },
-  { problem: "What is 57X89+23?", answer: "5096" },
-  { problem: "How many cannons in Lumbridge Castle?", answer: "9" },
-  { problem: "People are waiting for the next Bard to perform.", answer: "4" }
+  { problem: "How many animals in total are there in the zoo?", answer: "32" },
+  { problem: "How many cannons does Lumbridge Castle have?", answer: "9" },
+  { problem: "I have 16 kebabs, I eat one myself and then share the rest equally between 3 friends. How many do they have each?", answer: "5" },
+  { problem: "If x is 15 and y is 3, what is 3x + y?", answer: "48" },
+  { problem: "What is 19 to the power of 3?", answer: "6859" },
+  { problem: "What is 57 x 89 + 23?", answer: "5096" }
   // ADD NEW ENTRIES ABOVE THIS LINE
 ];
 
