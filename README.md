@@ -90,7 +90,7 @@ To add or edit clue data, you only need to edit **ONE file**: `clue_data.js`
 ## File Structure
 
 ```
-treasure v3/
+
 ├── index.html          - Main page (edit for maps HTML)
 ├── clue_data.js        - ALL CLUE DATA (edit this!)
 ├── popup.js            - App logic (don't edit)
